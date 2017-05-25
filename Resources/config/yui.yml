@@ -1,0 +1,5 @@
+system:
+    default:
+        javascript:
+            files:
+                - '%siteimprove_platformui.public_dir%/js/siteimprove.js'

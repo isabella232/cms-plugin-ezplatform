@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<software>
+    <metadata>
+        <name>siteimprove/cms-plugin-ezplatform</name>
+        <version>1.0.0</version>
+        <copyright>Siteimprove</copyright>
+        <license>MIT</license>
+        <info_url>https://github.com/Siteimprove/CMS-plugin-eZPlatform</info_url>
+    </metadata>
+</software>

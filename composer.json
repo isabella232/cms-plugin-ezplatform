@@ -1,0 +1,27 @@
+{
+    "name": "siteimprove/cms-plugin-ezplatform",
+    "description": "Bridges the gap between eZ Platform and the Siteimprove Intelligence Platform",
+    "keywords": [
+        "ezpublish",
+        "ezplatform"
+    ],
+    "homepage": "https://github.com/Siteimprove/CMS-plugin-eZPlatform",
+    "type": "ezplatform-bundle",
+    "authors": [
+        {
+            "name": "Siteimprove",
+            "email": "support@siteimprove.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Siteimprove\\Bundle\\SiteimproveBundle\\": ""
+        }
+    }
+}

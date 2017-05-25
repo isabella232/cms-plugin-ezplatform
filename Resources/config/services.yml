@@ -1,0 +1,39 @@
+services:
+
+    siteimprove.token.fetcher:
+        class: Siteimprove\Bundle\SiteimproveBundle\Core\TokenFetcher
+        arguments:
+            - "@siteimprove.guzzle.client"
+            - "@database_connection"
+
+    siteimprove.url.computer:
+        class: Siteimprove\Bundle\SiteimproveBundle\Core\URLComputer
+        arguments:
+            - "@ezpublish.api.repository"
+            - "@router"
+            - "@ezpublish.route_reference.generator"
+            - "%ezpublish.siteaccess.default%"
+
+    siteimprove.publisher:
+        class: Siteimprove\Bundle\SiteimproveBundle\Core\Publisher
+        arguments:
+            - "@siteimprove.guzzle.client"
+            - "@siteimprove.token.fetcher"
+            - "@siteimprove.url.computer"
+            - "@ezpublish.translation_helper"
+            - "@logger"
+
+    siteimprove.guzzle.client.factory:
+        class: Siteimprove\Bundle\SiteimproveBundle\Core\GuzzleClientFactory
+
+    siteimprove.guzzle.client:
+        class: GuzzleHttp\Client
+        factory: ["@siteimprove.guzzle.client.factory", createWithProxy]
+        # Arguments will be injected here in the configuration
+        arguments: []
+
+    siteimprove.onpublish_slot:
+        class: Siteimprove\Bundle\SiteimproveBundle\Slot\SiteimproveUpdateOnPublish
+        arguments: ["@siteimprove.publisher"]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
