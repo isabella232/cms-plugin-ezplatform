@@ -19,7 +19,7 @@ class TokenFetcher
      * Site Improve Endpoint
      */
 
-    CONST TOKEN_ENDPOINT = "https://my2.siteimprove.com/auth/token?cms=eZ";
+    CONST TOKEN_ENDPOINT = "https://my2.siteimprove.com/auth/token?cms=eZ+Platform+";
 
     /**
      * @var Client
@@ -55,10 +55,17 @@ class TokenFetcher
             return $result[0]['value'];
         }
 
+        // get the version
+        $resultVersion = $this->dbalConnection->query(
+            "SELECT * FROM ezsite_data WHERE name = 'ezpublish-version' LIMIT 1"
+        )->fetchAll();
+
+        $version = count($resultVersion) == 1 ? $resultVersion[0]['value'] : "unknown";
+
         // fetch and store it
         $result = $this->httpClient->request(
             "GET",
-            static::TOKEN_ENDPOINT,
+            static::TOKEN_ENDPOINT."{$version}",
             [
                 'User-Agent' => 'eZ Platform Plugin',
                 'Accept'     => 'application/json'

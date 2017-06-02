@@ -1,0 +1,38 @@
+@startuml
+
+title General technical Overview
+
+actor "User" as admin
+entity "Browser" as browser
+entity "eZ" as eZ
+boundary "Siteimprove Intelligence Platform" as SIP
+
+== Browsing / Editing ==
+
+admin -> eZ: Load a page
+
+group When Token does not exist
+    eZ -> SIP: Get Token
+    SIP --> eZ: Token
+    eZ -> eZ: Token storage
+    note right
+      Token is stored in the table //ezsite_data//
+      Using the key **siteimprove-token**
+    end note
+end
+eZ --> browser: Token + Page
+
+browser --> admin: Display page
+
+browser <-> SIP: Get and display Widget
+browser -> SIP: Update the widget
+
+== Publication ==
+
+admin -> eZ: Send for Publishing
+eZ -> SIP: Update notification
+eZ --> browser: Page
+browser --> admin: Confirmation
+
+
+@enduml
