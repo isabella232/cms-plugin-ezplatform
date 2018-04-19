@@ -46,12 +46,12 @@ class TokenFetcher
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         $result = $this->dbalConnection->query(
             "SELECT * FROM ezsite_data WHERE name = '".static::EZSITEDATA_KEY."' LIMIT 1"
         )->fetchAll();
-        if (count($result) == 1) {
+        if (\count($result) === 1) {
             return $result[0]['value'];
         }
 
@@ -60,12 +60,12 @@ class TokenFetcher
             "SELECT * FROM ezsite_data WHERE name = 'ezpublish-version' LIMIT 1"
         )->fetchAll();
 
-        $version = count($resultVersion) == 1 ? $resultVersion[0]['value'] : "unknown";
+        $version = \count($resultVersion) === 1 ? $resultVersion[0]['value'] : "unknown";
 
         // fetch and store it
         $result = $this->httpClient->request(
             "GET",
-            static::TOKEN_ENDPOINT."{$version}",
+            static::TOKEN_ENDPOINT.$version,
             [
                 'User-Agent' => 'eZ Platform Plugin',
                 'Accept'     => 'application/json'

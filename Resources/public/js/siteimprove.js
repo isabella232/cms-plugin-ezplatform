@@ -8,7 +8,7 @@ window.addEventListener("load", function (e) {
 
 var SiteImproveUIModule = function () {
     var _token = '';
-    var _debug = true;
+    var _debug = false;
     var _currentData = {token: '', url: ''};
     var _publishClickableElements = [];
     var _timeout;

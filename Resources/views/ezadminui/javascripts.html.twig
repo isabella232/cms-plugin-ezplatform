@@ -1,0 +1,4 @@
+{{ render(controller("SiteimproveBundle:AdminUI:data", {locationId: app.request.get('locationId'), contentId: app.request.get('contentId')|default(null), lang: app.request.get('languageCode')|default(admin_ui_config.languages.priority.0) })) }}
+{% javascripts 'bundles/siteimprove/js/adminui/siteimprove.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}

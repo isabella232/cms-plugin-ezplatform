@@ -22,15 +22,15 @@ class GuzzleClientFactory
      *
      * @return Client A configured Guzzle client object (configured with optional proxy)
      */
-    public function createWithProxy($host = null, $port = null, $auth = null)
+    public function createWithProxy(?string $host = null, ?string $port = null, ?string $auth = null): Client
     {
         $options = ['proxy' => null];
-        if (!empty($host)) {
+        if (null !== $host) {
             $options['proxy'] = $host;
-            if (!empty($port)) {
+            if (null !== $port) {
                 $options['proxy'] .= ':'.$port;
             }
-            if (!empty($auth)) {
+            if (null !== $auth) {
                 $options['proxy'] = $auth.'@'.$options['proxy'];
             }
         }

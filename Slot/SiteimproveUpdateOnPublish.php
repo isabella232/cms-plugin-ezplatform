@@ -26,7 +26,10 @@ class SiteimproveUpdateOnPublish extends BaseSlot
         $this->publisher = $publisher;
     }
 
-    public function receive(Signal $signal)
+    /**
+     * @param Signal $signal
+     */
+    public function receive(Signal $signal): void
     {
         if (!$signal instanceof Signal\ContentService\PublishVersionSignal) {
             return;

@@ -59,7 +59,7 @@ class URLComputer
      *
      * @return string
      */
-    public function getURL($locationId = null, $contentId = null, $lang = null)
+    public function getURL(?int $locationId = null, ?int $contentId = null, ?string $lang = null): string
     {
         try {
             if ($locationId === null) {
@@ -87,10 +87,10 @@ class URLComputer
             return $currentMainUrl;
 
         } catch (\Exception $e) {
+            dump($locationId,$contentId,$lang);
+            dump($e);
             return '';
         }
-
-        return '';
     }
 
 }

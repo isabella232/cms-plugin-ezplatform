@@ -18,7 +18,7 @@ class SiteimproveExtension extends Extension implements PrependExtensionInterfac
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
@@ -30,20 +30,34 @@ class SiteimproveExtension extends Extension implements PrependExtensionInterfac
         $def->addArgument($config['proxy_settings']['host']);
         $def->addArgument($config['proxy_settings']['port']);
         $def->addArgument($config['proxy_settings']['user'].":".$config['proxy_settings']['pass']);
+
+        $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
+        if (\in_array('EzPlatformAdminUiBundle', $activatedBundles, true)) {
+            $loader->load('ezadminui.yml');
+        }
+
     }
 
-    public function prepend(ContainerBuilder $container)
+    /**
+     * {@inheritdoc}
+     */
+    public function prepend(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('assetic', ['bundles' => ['SiteimproveBundle']]);
 
-        $container->setParameter(
-            'siteimprove_platformui.public_dir',
-            'bundles/siteimprove'
-        );
-        $yuiConfigFile = __DIR__.'/../Resources/config/yui.yml';
-        $config        = Yaml::parse(file_get_contents($yuiConfigFile));
-        $container->prependExtensionConfig('ez_platformui', $config);
-        $container->addResource(new FileResource($yuiConfigFile));
+        $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
+
+        // 1.x
+        if (!\in_array('EzPlatformAdminUiBundle', $activatedBundles, true)) {
+            $container->setParameter(
+                'siteimprove_platformui.public_dir',
+                'bundles/siteimprove'
+            );
+            $yuiConfigFile = __DIR__.'/../Resources/config/yui.yml';
+            $config        = Yaml::parse(file_get_contents($yuiConfigFile));
+            $container->prependExtensionConfig('ez_platformui', $config);
+            $container->addResource(new FileResource($yuiConfigFile));
+        }
     }
 
 }

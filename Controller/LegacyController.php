@@ -20,7 +20,7 @@ class LegacyController extends Controller
      *
      * @return array
      */
-    public function dataAction($moduleResult = [], $contentId = null, $language = null)
+    public function dataAction(array $moduleResult = [], ?int $contentId = null, ?string $language = null): array
     {
         unset($moduleResult['content']);
         if ($contentId <= 0 && isset($moduleResult['content_info'])) {

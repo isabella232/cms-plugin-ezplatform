@@ -1,6 +1,8 @@
-var SiteImproveLegacyModule = function () {
+var SiteImproveAdminUIModule = function () {
     var _token = '';
-    var _debug = false;
+    var _debug = true;
+    var _timeout;
+    var _publishClickableElements = [];
 
     function _addScript(url, onload) {
         var script_tag = document.createElement('script');
@@ -65,7 +67,7 @@ var SiteImproveLegacyModule = function () {
             _domain('');
         });
 
-        $("input[name^=PublishButton]").click(function() {
+        $("button[id^=content_edit__sidebar_right__publish-tab]").click(function () {
             var data = _getContainerData();
             if (data !== false) {
                 if (data.url && data.url !== '') {
@@ -74,6 +76,7 @@ var SiteImproveLegacyModule = function () {
             }
             return true;
         });
+        _change();
     }
 
     function _input(url, callback) {
@@ -96,17 +99,74 @@ var SiteImproveLegacyModule = function () {
         _call('clear', '', callback);
     }
 
+    //@optim possible: Only way to do that, waiting information from eZ Systems to get an Handler/Listener/Something
+    function _change() {
+        clearTimeout(_timeout);
+        _timeout = setTimeout(SiteImproveAdminUIModule.setClickCallOnPublish, 250);
+        var hash = decodeURIComponent(window.location.hash);
+        var parts = hash.split("/").filter(function (value) {
+            return value.length > 0;
+        });
+        if (parts.slice(1, 3).join("/") === "studio/insite") {
+            _input(parts.slice(3).join("/"));
+        } else if (parts.slice(4, 7).join("/") === "studio/landing-page/dynamic") {
+            _input(parts.slice(7).join("/"));
+        }
+    }
+
+    //@optim possible: No way to do better here... waiting information from eZ Systems
+    function _setClickCallOnPublish() {
+        // Due to the current YUI implementation we have to listen in the hierarchy and test the target
+        var clickableZones = [];
+        document.querySelectorAll("div[data-selected-option=publish]").forEach(function (publishButton) {
+            clickableZones.push(publishButton.parentNode);
+        });
+
+        var action = function () {
+            var data = _getContainerData();
+            if (data !== false) {
+                if (data.url && data.url !== '') {
+                    _recheck(data.url);
+                }
+            }
+        };
+
+        if (clickableZones.length >= 1) {
+            clickableZones.forEach(function (clickableElt) {
+                if (_publishClickableElements.indexOf(clickableElt) === -1) {
+                    clickableElt.addEventListener("click", function (e) {
+                        if (e.target.parentNode.parentNode.getAttribute('data-selected-option') === 'publish') {
+                            action();
+                        }
+                    }, false);
+                    _publishClickableElements.push(clickableElt);
+                }
+            });
+
+            // if we find then, we stop the timeout
+            return;
+        }
+        _timeout = setTimeout(SiteImproveAdminUIModule.setClickCallOnPublish, 250);
+
+    }
+
+
     return {
         init: _init,
         input: _input,
         domain: _domain,
         recheck: _recheck,
         recrawl: _recrawl,
-        clear: _clear
+        clear: _clear,
+        change: _change,
+        setClickCallOnPublish: _setClickCallOnPublish
     };
 }();
 
 
 $(function () {
-    SiteImproveLegacyModule.init();
+    SiteImproveAdminUIModule.init();
+    window.addEventListener("hashchange", function (e) {
+        SiteImproveAdminUIModule.change();
+    }, false);
 });
