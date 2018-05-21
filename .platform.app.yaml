@@ -1,6 +1,6 @@
 # Install an eZ Platform
 name: app
-type: php:7.1
+type: php:7.2
 build:
     flavor: "none"
 
