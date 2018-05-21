@@ -87,8 +87,6 @@ class URLComputer
             return $currentMainUrl;
 
         } catch (\Exception $e) {
-            dump($locationId,$contentId,$lang);
-            dump($e);
             return '';
         }
     }
