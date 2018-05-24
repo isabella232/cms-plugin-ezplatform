@@ -24,7 +24,7 @@ mounts:
 hooks:
     build: |
         set -e
-        composer create-project ezsystems/ezplatform --no-dev --prefer-dist --no-progress --no-interaction --no-scripts
+        composer create-project ezsystems/ezplatform-demo --no-dev --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
         curl -o tests/platform.sh/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
         WRAP_APP_DIR=./ezplatform php tests/platform.sh/wrap.php
         cd ezplatform
@@ -32,7 +32,7 @@ hooks:
     deploy: |
         set -e
         cd ezplatform
-        bin/console ezplatform:install clean
+        bin/console ezplatform:install platform-demo
         mv var/cache/$SYMFONY_ENV var/cache/oldcache
         bin/console cache:clear
     post_deploy: |
