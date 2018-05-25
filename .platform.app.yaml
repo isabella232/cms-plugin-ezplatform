@@ -21,7 +21,7 @@ mounts:
     "/ezplatform/var/logs": "shared:files/logs"
     "/ezplatform/web/var": "shared:files/files"
     "/ezplatform/var/sessions": "shared:files/sessions"
-    "/src/AppBundle/MigrationVersions/References": "shared:files/src/AppBundle/MigrationVersions/References"
+    "/ezplatform/src/AppBundle/MigrationVersions/References": "shared:files/src/AppBundle/MigrationVersions/References"
 hooks:
     build: |
         set -e
