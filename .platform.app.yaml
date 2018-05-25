@@ -33,6 +33,9 @@ hooks:
     deploy: |
         set -e
         cd ezplatform
+        bin/console doctrine:database:drop --force
+        bin/console doctrine:database:create
+        bin/console ezplatform:install clean
         bin/console ezplatform:install platform-demo
         mv var/cache/$SYMFONY_ENV var/cache/oldcache
         bin/console cache:clear
