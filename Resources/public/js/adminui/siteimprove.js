@@ -1,5 +1,7 @@
+var $ = jQuery;
 var SiteImproveAdminUIModule = function () {
     var _token = '';
+    var $ = jQuery;
     var _debug = true;
     var _timeout;
     var _publishClickableElements = [];
@@ -164,7 +166,7 @@ var SiteImproveAdminUIModule = function () {
 }();
 
 
-$(function () {
+jQuery(function () {
     SiteImproveAdminUIModule.init();
     window.addEventListener("hashchange", function (e) {
         SiteImproveAdminUIModule.change();
