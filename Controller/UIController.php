@@ -23,7 +23,7 @@ class UIController extends Controller
      *
      * @return JsonResponse
      */
-    public function dataAction($locationId = null, $contentId = null, $language = null)
+    public function dataAction(?int $locationId = null, ?int $contentId = null, ?string $language = null): JsonResponse
     {
         $data     = [
             'token' => $this->get("siteimprove.token.fetcher")->getToken(),

@@ -1,0 +1,4 @@
+_siteimprove_routes:
+    resource: "@SiteimproveBundle/Controller"
+    type:     annotation
+    prefix:   /_siteimprove

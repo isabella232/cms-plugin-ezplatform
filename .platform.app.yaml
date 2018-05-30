@@ -1,0 +1,50 @@
+# Install an eZ Platform
+name: app
+type: php:7.2
+build:
+    flavor: "none"
+
+relationships:
+    database: 'mysqldb:user'
+variables:
+    env:
+        SYMFONY_ENV: prod
+web:
+    locations:
+        "/":
+            root: "ezplatform/web"
+            passthru: "/app.php"
+            expires: 600
+disk: 2048
+mounts:
+    "/ezplatform/var/cache": "shared:files/cache"
+    "/ezplatform/var/logs": "shared:files/logs"
+    "/ezplatform/web/var": "shared:files/files"
+    "/ezplatform/var/sessions": "shared:files/sessions"
+    "/ezplatform/src/AppBundle/MigrationVersions/References": "shared:files/src/AppBundle/MigrationVersions/References"
+hooks:
+    build: |
+        set -e
+        composer create-project ezsystems/ezplatform-demo:v2.1.1-rc1 --no-dev --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
+        curl -o tests/platform.sh/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
+        WRAP_APP_DIR=./ezplatform php tests/platform.sh/wrap.php
+        cd ezplatform
+        composer update --no-dev --lock
+    deploy: |
+        set -e
+        cd ezplatform
+        bin/console doctrine:database:drop --force
+        bin/console doctrine:database:create
+        bin/console ezplatform:install clean
+        bin/console ezplatform:install platform-demo
+        mv var/cache/$SYMFONY_ENV var/cache/oldcache
+        bin/console cache:clear
+    post_deploy: |
+        set -e
+        rm -rf ezplatform/var/cache/oldcache
+
+runtime:
+    extensions:
+        - xsl
+        - imagick
+        - readline

@@ -26,8 +26,15 @@ class SiteimproveUpdateOnPublish extends BaseSlot
         $this->publisher = $publisher;
     }
 
-    public function receive(Signal $signal)
+    /**
+     * @param Signal $signal
+     */
+    public function receive(Signal $signal): void
     {
+        // see: https://jira.ez.no/browse/EZP-29252
+        if ("cli" === PHP_SAPI) {
+            return;
+        }
         if (!$signal instanceof Signal\ContentService\PublishVersionSignal) {
             return;
         }

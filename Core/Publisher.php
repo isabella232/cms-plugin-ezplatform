@@ -67,7 +67,7 @@ class Publisher
     /**
      * @param $contentId
      */
-    public function update($contentId)
+    public function update($contentId): void
     {
         $langs    = $this->translationHelper->getAvailableLanguages();
         $doneURLs = [];
@@ -77,7 +77,7 @@ class Publisher
                 continue;
             }
             $url = $this->URLComputer->getURL(null, $contentId, $lang);
-            if (in_array($url, $doneURLs)) {
+            if (\in_array($url, $doneURLs)) {
                 continue;
             }
             $doneURLs[] = $url;
