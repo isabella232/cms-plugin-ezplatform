@@ -2,7 +2,7 @@ var $ = jQuery;
 var SiteImproveAdminUIModule = function () {
     var _token = '';
     var $ = jQuery;
-    var _debug = true;
+    var _debug = false;
     var _timeout;
     var _publishClickableElements = [];
 
